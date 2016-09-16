@@ -27,19 +27,18 @@ function get($progress){
 }
 
 function encrypt($encrypt,$key) {
- $key = dechex(crc32($key));
- $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
- $passcrypt = mcrypt_encrypt ( MCRYPT_RIJNDAEL_256, $key, $encrypt, MCRYPT_MODE_ECB, $iv );
- $encode = base64_encode ( $passcrypt );
- return $encode;
+  $key = dechex(crc32($key));
+  $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
+  $passcrypt = mcrypt_encrypt ( MCRYPT_RIJNDAEL_256, $key, $encrypt, MCRYPT_MODE_ECB, $iv );
+  $encode = base64_encode ( $passcrypt );
+  return $encode;
 }
-
 function decrypt($decrypt,$key) {
- $key=dechex(crc32($key));
- $decoded = base64_decode ( $decrypt );
- $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
- $decrypted = rtrim( mcrypt_decrypt ( MCRYPT_RIJNDAEL_256, $key, $decoded, MCRYPT_MODE_ECB, $iv ), "\0");
- return $decrypted;
+  $key=dechex(crc32($key));
+  $decoded = base64_decode ( $decrypt );
+  $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
+  $decrypted = rtrim( mcrypt_decrypt ( MCRYPT_RIJNDAEL_256, $key, $decoded, MCRYPT_MODE_ECB, $iv ), "\0");
+  return $decrypted;
 }
 
 header('Content-Type:application/json');
