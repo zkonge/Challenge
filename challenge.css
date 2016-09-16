@@ -1,0 +1,17 @@
+html{height:100%;-webkit-font-smoothing:antialiased}
+body,h1,p,ul,ol,li{margin:0;padding:0;cursor:default;user-select:none;-webkit-user-select:none;-moz-user-select:none}
+body{height:100%;font-family:"Avenir Next","Helvetica Neue",Helvetica,Arial,"PingFang SC","Source Han Sans SC","Microsoft YaHei",sans-serif}
+input{width:20rem;height:2rem;margin-top:2rem;padding:0 10px;text-align:center;background:#fff;border:2px solid #29c670;outline:none}
+input::input-placeholder{text-align:center}
+input::-ms-input-placeholder{text-align:center}
+input::-webkit-input-placeholder{text-align:center}
+input.error{border:2px solid red}
+input[type="submit"]{color:#fff;background:#29c670;border:none;transition:background .3s}
+input[type="submit"]:hover{background:#28b070}
+input[type="submit"]:active{background:#25a056}
+.wrapper{width:100%;height:100%;display:table}
+.main{display:table-cell;vertical-align:middle;text-align:center;cursor:default}
+.main h1{margin-bottom:2rem;font-family:'Helvetica Neue',Arial,sans-serif;font-size:35px;line-height:1rem}
+.main p{color:#888;font-size:16px}
+.main p#error{color:red}
+.copyright{font-size:8px;color:#aaa;position:absolute;right:4px;bottom:4px}
