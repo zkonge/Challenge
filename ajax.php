@@ -3,11 +3,11 @@ if(!isset($_POST['mod']))exit;
 
 error_reporting(0);
 
-include 'questions.php';
-
-$key = 'haha';
-$key = $_SERVER['HTTP_USER_AGENT'].$key.$_SERVER["REMOTE_ADDR"];
+$rawKey = 'haha';
 $version = 0;
+
+$key = md5($_SERVER['HTTP_USER_AGENT'].$rawKey.$_SERVER["REMOTE_ADDR"]);
+$questionFolderPath = 'question/';
 
 function encrypt($encrypt, $key){
   $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
@@ -28,46 +28,47 @@ $ret = [
   'status' => 0
 ];
 
+$questionPool = $_POST['questionPool'];
+
+if(isset($_POST['key'])){
+  $info = json_decode(decrypt($_POST['key'], $key), true);
+
+  $questionPool = $info[0];
+  $maxProgress = $info[1];
+  $progress = (int)$_POST['progress'];
+}
+
+$questionPath = $questionFolderPath.$questionPool.'.php';
+if(!isset($questionPool) || !file_exists($questionPath)){
+  $questionPool = 'default';
+  $questionPath = $questionFolderPath.'default.php';
+}
+if($_POST['mod']!='getKey')include $questionPath;
+
 switch($_POST['mod']){
   case 'getHint':
-    $info = json_decode(decrypt($_POST['key'], $key), true);
 
-    if($info[2]<$version){
-      $ret=['status'=>2];
+    if($info[2]!=$version){
+      $ret = ['status'=>2];
       break;
     }
-
-    $questionPool = $info[0];
-    $maxProgress = $info[1];
-    $progress = (int)$_POST['progress'];
 
     if($maxProgress<$progress)break;
 
     $ret = [
       'status' => 1,
-      'hint' => $questions[$questionPool][$progress][0]
+      'hint' => $questions[$progress][0]
     ];
     break;
 
   case 'checkAnswer':
-    //It won't slow down a lot
-    $info = json_decode(decrypt($_POST['key'], $key), true);
-
-    if($info[2]<$version){
-      $ret=['status'=>2];
-      break;
-    }
-
-    $questionPool = $info[0];
-    $maxProgress = $info[1];
-    $progress = (int)$_POST['progress'];
     $answer = $_POST['answer'];
 
-    if(!($progress>=0 && $progress<count($questions[$questionPool])))break;
+    if(!($progress>=0 && $progress<count($questions)))break;
 
     if($maxProgress<$progress)break;
 
-    if($questions[$questionPool][$progress][1]===$answer)
+    if($questions[$progress][1]===$answer)
       if($maxProgress===$progress)
         $ret = [
           'status' => 1,
@@ -81,11 +82,6 @@ switch($_POST['mod']){
     break;
 
   case 'getKey':
-    if(isset($_POST['questionPool'], $questions[$_POST['questionPool']]))
-      $questionPool = $_POST['questionPool'];
-    else
-      $questionPool = 'default';
-
     $ret = [
       'status' => 1,
       'key' => encrypt(json_encode([$questionPool, 0, $version]), $key)
