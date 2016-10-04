@@ -1,6 +1,8 @@
 # Challenge
 **简单的多题库答题系统**
 
+DEMO:[点我进入](http://lab.konge.pw/challenge/)
+
 [![PHP VERSION](https://img.shields.io/badge/PHP-5.4+-green.svg?maxAge=2592000)]()
 
 >需要
@@ -13,7 +15,7 @@
 
 1.修改 $rawKey (可以滚键盘), 每次修改需同时修改 $version 使前端自动更新key
 
-2.添加文件到 /questions 文件夹, 文件名为 题库名+'.php' (不包含双引号).
+2.将题目文件放入 /questions, 文件名为 题库名+'.php' (不包含双引号).
 
 格式:
 ```php
